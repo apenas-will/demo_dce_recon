@@ -46,18 +46,23 @@ if __name__ == "__main__":
     ds = pydicom.dcmread(args.dcm)
 
 
-    OUT_DIR = DIR + '/' + args.h5py  + '/' + args.h5py + '_DCM_processed'
-    OUT_DIR = OUT_DIR.split('.h5')[0]
-    pathlib.Path(OUT_DIR).mkdir(parents=True, exist_ok=True)
-    #print('> reconstructed files are stored in: ', OUT_DIR)
+    h5_base = os.path.splitext(os.path.basename(args.h5py))[0]
+    h5_dir = os.path.dirname(os.path.abspath(args.h5py))
 
-    f = h5py.File(DIR + '/' + args.h5py + '/' + args.h5py + '_processed.h5', 'r')
+    OUT_DIR = os.path.join(h5_dir, h5_base + '_DCM_processed')
+    pathlib.Path(OUT_DIR).mkdir(parents=True, exist_ok=True)
+
+    processed_path = os.path.join(h5_dir, h5_base + '_processed.h5')
+    f = h5py.File(processed_path, 'r')
     R = f['temptv'][:]
     f.close()
 
     R = np.squeeze(abs(R))
 
-    R = np.flip(R, axis=(-2, -1)) # upward orientation
+    if R.ndim == 3:
+        R = R[np.newaxis, ...]
+
+    R = np.flip(R, axis=(-2, -1))
 
     N_z, N_t, N_y, N_x = R.shape
     print(R.shape)

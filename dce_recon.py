@@ -6,7 +6,6 @@ import pathlib
 import numpy as np
 import sigpy as sp
 import torch
-import cupy as cp
 
 from sigpy.mri import app
 
@@ -157,7 +156,7 @@ if __name__ == "__main__":
         # coil sensitivity maps
         print('> compute coil sensitivity maps')
         C = get_coil(ksp_zf[s], device=device)
-        C = C[:, None, :, :]
+        C = C[:, :, None, :, :]
         print('  coil shape: ', C.shape)
 
         # recon
@@ -175,14 +174,12 @@ if __name__ == "__main__":
 
         acq_slices.append(R1)
 
-    acq_slices = sp.to_device(acq_slices)
+    acq_slices = np.array([sp.to_device(s) for s in acq_slices])
+    acq_slices = np.squeeze(np.abs(acq_slices))
 
-    acq_slices = cp.array(acq_slices)
-    acq_slices = cp.asnumpy(acq_slices)
-    acq_slices = np.squeeze(abs(acq_slices))
-
-        # save recon files
-    f = h5py.File(OUT_DIR + '/' + args.dir + '_processed.h5', 'w')
+    # save recon files
+    data_base = os.path.splitext(args.data)[0]
+    f = h5py.File(os.path.join(OUT_DIR, data_base + '_processed.h5'), 'w')
     dset = f.create_dataset('temptv', data=acq_slices)
     dset.attrs['spokes_per_frame'] = args.spokes_per_frame
     dset.attrs['number_of_frames'] = N_time

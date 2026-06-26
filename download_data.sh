@@ -1,0 +1,3 @@
+curl -C - "https://fastmri-dataset.s3.amazonaws.com/v4.0/fastMRI_breast_IDS_001_010.tar.gz?AWSAccessKeyId=AKIAJM2LEZ67Y2JL3KRA&Signature=HsKCLO3gFEJdidHsgc2mKqWBn%2Fk%3D&Expires=1788635766" --output fastMRI_breast_IDS_001_010.tar.gz
+curl -C - "https://fastmri-dataset.s3.amazonaws.com/v4.0/fastMRI_breast_IDS_011_020.tar.gz?AWSAccessKeyId=AKIAJM2LEZ67Y2JL3KRA&Signature=65jyqsOn0uaRSwgKdYpicv5QRgQ%3D&Expires=1788635766" --output fastMRI_breast_IDS_011_020.tar.gz
+curl -C - "https://fastmri-dataset.s3.amazonaws.com/v4.0/fastMRI_breast_IDS_021_030.tar.gz?AWSAccessKeyId=AKIAJM2LEZ67Y2JL3KRA&Signature=IU7UwVidf4YOBZpGM9PyglTQRUU%3D&Expires=1788635766" --output fastMRI_breast_IDS_021_030.tar.gz
